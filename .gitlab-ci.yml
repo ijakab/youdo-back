@@ -1,0 +1,4 @@
+include:
+  - project: 'tools/cigen'
+    ref: master
+    file: 'gitlabIncludes/universalDocker.yml'
