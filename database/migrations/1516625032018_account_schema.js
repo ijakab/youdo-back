@@ -1,0 +1,28 @@
+'use strict'
+
+const Schema = use('Schema')
+
+class AccountSchema extends Schema {
+    up() {
+        this.create('accounts', (table) => {
+            table.increments()
+            table.integer('user_id').unsigned().references('users.id').onDelete('cascade')
+            table.enum('type', ['main', 'facebook', 'google', 'linkedin'])
+            table.string('email', 254).notNullable() // email is not unique, because user can have same email on facebook and google, etc.
+            table.boolean('validated').defaultTo(false)
+
+            // social id and password are not strictly required because one excludes another
+            table.string('social_id', 60)
+            table.string('password', 60)
+            table.timestamps()
+
+            table.collate('utf8_general_ci')
+        })
+    }
+
+    down() {
+        this.drop('accounts')
+    }
+}
+
+module.exports = AccountSchema

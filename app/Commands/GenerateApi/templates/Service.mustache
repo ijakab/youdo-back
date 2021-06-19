@@ -1,0 +1,38 @@
+'use strict'
+const {{Model}}Model = use('App/Models/{{Model}}')
+const validateAndSave = use('App/Helpers/ValidateAndSave')
+
+class {{Model}}Service {
+    constructor(ctx) {
+        this._user = ctx.user
+    }
+
+    getAll(filters) {
+        let query = {{Model}}Model.query()
+        if(filters) //handle filters
+        return query
+    }
+
+    getSingle(slug) {
+        return {{Model}}Model
+            .query()
+            .where('slug', slug)
+    }
+
+    async create(data) {
+        return await {{Model}}Model.create({
+            ...data,
+            user_id: this._user.id,
+        })
+    }
+
+    async update({{Model}}, data) {
+        return await validateAndSave({{Model}}, data, 'required', 'fields')
+    }
+
+    async delete({{Model}}) {
+        return await {{Model}}.delete()
+    }
+}
+
+module.exports = {{Model}}Service

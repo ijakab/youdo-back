@@ -1,0 +1,66 @@
+{
+  "name": "Adonis-Starter",
+  "version": "1.0.0",
+  "description": "Adonis starter",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "init": "node ace migration:run --force && node ace seed --force",
+    "refresh": "node ace migration:refresh && node ace seed",
+    "docs": "rimraf public/docs && apidoc -i app/ -o public/docs",
+    "test": "export NODE_ENV=testing|| set NODE_ENV=testing&& (node ace migration:run && node ace seed && nyc node ace test --bail)"
+  },
+  "author": "hlozancic",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@adonisjs/ace": "^5.0.8",
+    "@adonisjs/ally": "^2.1.2",
+    "@adonisjs/antl": "^2.0.7",
+    "@adonisjs/auth": "^3.0.7",
+    "@adonisjs/bodyparser": "^2.0.9",
+    "@adonisjs/cors": "^1.0.7",
+    "@adonisjs/fold": "^4.0.9",
+    "@adonisjs/framework": "^5.0.12",
+    "@adonisjs/ignitor": "^2.0.8",
+    "@adonisjs/lucid": "^6.1.3",
+    "@adonisjs/lucid-slugify": "^1.0.3",
+    "@adonisjs/mail": "^3.0.9",
+    "@adonisjs/validator": "^5.0.6",
+    "@adonisjs/vow": "^1.0.17",
+    "adonis-bumblebee": "^1.5.3",
+    "adonis-cache": "^0.3.2",
+    "adonis-throttle-requests": "^1.0.2",
+    "mysql": "^2.16.0"
+  },
+  "devDependencies": {
+    "apidoc": "^0.17.7",
+    "nyc": "^13.1.0",
+    "rimraf": "^2.6.2",
+    "sqlite3": "^4.0.4"
+  },
+  "apidoc": {
+    "description": "",
+    "header": {
+      "filename": "apidoc.md"
+    },
+    "order": [
+      "Auth",
+      "User"
+    ]
+  },
+  "autoload": {
+    "App": "./app",
+    "CustomTest": "./test/Traits"
+  },
+  "nyc": {
+    "exclude": [
+      "./*.*",
+      "database",
+      "config",
+      "public",
+      "start",
+      "test"
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+'use strict'
+const BaseTransformer = use('App/Transformers/BaseTransformer')
+
+class {{Model}}Transformer extends BaseTransformer {
+
+    availableInclude() {
+        return [
+
+        ]
+    }
+
+    defaultInclude() {
+        return [
+
+        ]
+    }
+
+    async transform(model, ctx) {
+        let additional = this.getAdditional(ctx)
+        return {
+            title: model.title,
+            slug: model.slug
+        }
+    }
+}
+
+module.exports = {{Model}}Transformer
+
+// Cyclic dependencies go here

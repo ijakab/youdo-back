@@ -1,0 +1,43 @@
+# exclude docs, we are generating them via npm run docs
+public/docs
+
+# The development and test
+database/*.sqlite
+.nyc_output
+
+# Node modules
+node_modules
+
+# Adonis directory for storing tmp files
+tmp
+
+# Environment variables, never commit this file
+.env
+.env.override
+
+# PM2 configs
+pm2.stage.json
+pm2.prod.json
+
+# Node.js / NPM default files
+lib-cov
+*.seed
+*.log
+*.out
+*.pid
+npm-debug.log
+
+# Lock files
+package-lock.json
+yarn.lock
+
+# Miscellaneous
+*~
+*#
+.DS_STORE
+.netbeans
+nbproject
+.idea
+.node_history
+dump.rdb
+.vscode

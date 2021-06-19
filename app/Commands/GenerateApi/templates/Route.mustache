@@ -1,0 +1,91 @@
+'use strict'
+const Route = use('Route')
+
+module.exports = Route.group(() => {
+
+    /**
+    * @api {get} /api/{{Model}}/ Show {{Model}} collection
+    * @apiGroup {{Model}}
+    *
+    * @apiPermission JWT {admin}
+    *
+    * @apiDescription Show and filter {{Model}} instances
+    *
+    */
+
+    Route.get('/', '{{Model}}Controller.show').middleware([
+        'serviceCreator:{{Model}}Service'
+    ])
+
+
+    /**
+    * @api {get} /api/{{Model}}/:slug Get single {{Model}}
+    * @apiGroup {{Model}}
+    *
+    * @apiPermission JWT {admin}
+    *
+    * @apiParam {string} [slug] Slug of {{Model}} to show
+    *
+    * @apiDescription Get single {{Model}} instance
+    *
+    */
+
+    Route.get('/:slug', '{{Model}}Controller.single').middleware([
+        'instanceExists:{{Model}} slug',
+    ])
+
+
+    /**
+    * @api {post} /api/{{Model}}/ Add new {{Model}}
+    * @apiGroup {{Model}}
+    *
+    * @apiPermission JWT {admin}
+    *
+    * @apiParam {string} [title] {{Model}} title
+    *
+    * @apiDescription Add new {{Model}} instance
+    *
+    */
+
+    Route.post('/', '{{Model}}Controller.add').middleware([
+        'globalValidator:required fields with space in between',
+        'serviceCreator:{{Model}}Service'
+    ])
+
+    /**
+    * @api {patch} /api/{{Model}}/:slug Update instance of {{Model}}
+    * @apiGroup {{Model}}
+    *
+    * @apiPermission JWT {admin}
+    *
+    * @apiParam {string} [slug] Slug of {{Model}} instance to update
+    * @apiParam {string} [title] {{Model}} title
+    *
+    * @apiDescription Update existing {{Model}} instance
+    *
+    */
+
+    Route.patch('/:slug', '{{Model}}Controller.update').middleware([
+        //we do not register globalValidator here, instead we merge sent data and validate it when merged
+        'instanceExists:{{Model}} slug',
+        'serviceCreator:{{Model}}Service'
+    ])
+
+    /**
+    * @api {delete} /api/{{Model}}/:slug Delete instance of {{Model}}
+    * @apiGroup {{Model}}
+    *
+    * @apiPermission JWT {admin}
+    *
+    * @apiParam {string} [slug] Slug of {{Model}} instance to delete
+    *
+    * @apiDescription Delete existing {{Model}} instance
+    *
+    */
+
+    Route.delete('/:slug', '{{Model}}Controller.delete').middleware([
+        'serviceCreator:{{Model}}Service',
+        'instanceExists:{{Model}} slug'
+    ])
+
+})

@@ -1,0 +1,107 @@
+const sharedData = require('../../testData')
+const {{Model}} = use('App/Models/{{Model}}')
+
+const {test, trait} = use('Test/Suite')('{{Model}} testing')
+trait('Test/ApiClient')
+
+test('Should add {{Model}}', async ({client, assert}) => {
+    let response = await client.post('/api/{{Model}}/add').send({
+        //todo valid data goes here
+        title: 'Testing {{Model}}'
+    }).end()
+    response.assertStatus(200)
+    assert.containSubset(response.body.data, {
+        title: 'Testing {{Model}}'
+    })
+    sharedData.{{Model}}Slug = response.body.data.slug
+    let record = await {{Model}}.findBy('title', 'Testing {{Model}}')
+    assert.containSubset(record.toJSON(), {
+        title: 'Testing {{Model}}'
+    })
+})
+
+test('Should not allow to create {{Model}} with insufficient data', async ({client, assert}) => {
+    let response = await client.post('/api/{{Model}}/add').send({
+        //todo invalid data goes here
+        title: 'Bad {{Model}}'
+    }).end()
+    assert.plan(2)
+    response.assertStatus(400)
+    try{
+        await {{Model}}.findByOrFail('title', 'Bad {{Model}}')
+    } catch (e) {
+        assert.equal(1, 1)
+    }
+})
+
+test('Should not allow to create with {{Model}} non-existing relation', async ({client, assert}) => {
+    let response = await client.post('/api/{{Model}}/add').send({
+        //todo invalid relation goes here
+        title: 'Bad {{Model}} 2',
+    }).end()
+    assert.plan(2)
+    response.assertStatus(400)
+    try{
+        await {{Model}}.findByOrFail('title', 'Bad {{Model}} 2')
+    } catch (e) {
+        assert.equal(1, 1)
+    }
+})
+
+test('Should get all {{Model}}', async ({client, assert}) => {
+    let response = await client.post('/api/{{Model}}/show?page=1&perPage=3').send().end()
+    response.assertStatus(200)
+    assert.containSubset(response.body.data.data[0], {
+        title: 'Testing {{Model}}'
+    })
+    assert.equal(response.body.data.pagination.total, 1)
+    assert.equal(response.body.data.pagination.perPage, 3)
+})
+
+test('Pagination {{Model}} should work', async ({client, assert}) => {
+    let response = await client.post('/api/{{Model}}/show?page=2&perPage=3').send().end()
+    response.assertStatus(200)
+    assert.equal(response.body.data.data.length, 0)
+    assert.equal(response.body.data.pagination.total, 1)
+    assert.equal(response.body.data.pagination.perPage, 3)
+})
+
+
+test('Should update {{Model}}', async ({client, assert}) => {
+    let response = await client.patch('/api/{{Model}}/'+sharedData.{{Model}}Slug).send({
+        title: 'Testing {{Model}} updated'
+    }).end()
+    response.assertStatus(200)
+    assert.containSubset(response.body.data, {
+        title: 'Testing {{Model}} updated'
+    })
+    sharedData.{{Model}}Slug = response.body.data.slug
+    let record = await {{Model}}.findBy('title', 'Testing {{Model}} updated')
+    assert.containSubset(record.toJSON(), {
+        title: 'Testing {{Model}} updated'
+    })
+})
+
+test('Should not update {{Model}} with invalid data', async ({client, assert}) => {
+    let response = await client.patch('/api/{{Model}}/'+sharedData.{{Model}}Slug).send({
+        //todo invalid data goes here
+    }).end()
+    assert.plan(2)
+    response.assertStatus(400)
+    try{
+        await {{Model}}.findByOrFail(/*todo invalid data goes here */)
+    } catch(e) {
+        assert.equal(1, 1)
+    }
+})
+
+test('Should delete {{Model}}', async ({client, assert}) => {
+    let response = await client.delete('/api/{{Model}}/'+sharedData.{{Model}}Slug).send().end()
+    assert.plan(2)
+    response.assertStatus(200)
+    try {
+        await {{Model}}.findByOrFail('title', 'Testing {{Model}} updated')
+    } catch (e) {
+        assert.equal(1, 1)
+    }
+})
